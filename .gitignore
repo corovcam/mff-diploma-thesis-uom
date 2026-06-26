@@ -27,3 +27,5 @@ thesis.run.xml
 *.vrb
 thesis.pdf
 .output/
+.context/
+*.bkp

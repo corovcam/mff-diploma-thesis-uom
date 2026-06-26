@@ -1,7 +1,7 @@
 % Metadata to be stored in PDF, see documentation of the pdfx package for more details.
 
-\Author{Martin Čorovčák}
-\Title{Thesis title}
+\Author{Bc. Martin Čorovčák}
+\Title{Universal Object Mapping Assistant: LLM-Assisted Migration of Application Persistence Layers}
 \Keywords{keywords\sep more such\sep yet another}
 \Subject{Abstract of thesis}
 \Publisher{Charles University}

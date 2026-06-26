@@ -1,5 +1,13 @@
-\documentclass[12pt,a4paper,twoside,openright]{report}
-\let\openright=\cleardoublepage
+\documentclass[12pt,a4paper]{report}
+\setlength\textwidth{145mm}
+\setlength\textheight{247mm}
+\setlength\oddsidemargin{15mm}
+\setlength\evensidemargin{15mm}
+\setlength\topmargin{0mm}
+\setlength\headsep{0mm}
+\setlength\headheight{0mm}
+% \openright makes the following text appear on a right-hand page
+\let\openright=\clearpage
 
 \input{metadata}
 
@@ -12,7 +20,7 @@
 % If you feel it would help anything, you can enlarge the printable area a bit:
 %\usepackage[textwidth=390pt,textheight=630pt]{geometry}
 % The official recommendation expands the area quite a bit (looks pretty harsh):
-%\usepackage[textwidth=145mm,textheight=247mm]{geometry}
+% \usepackage[textwidth=145mm,textheight=247mm]{geometry}
 
 %%% TYPICAL FONT CHOICES (uncomment what you like) %%%
 
@@ -36,13 +44,51 @@
 %\setmonofont{TeX Gyre Cursor}
 
 % some useful packages
-\usepackage{microtype}
+% \usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage[ddmmyyyy]{datetime}
+% \usepackage{hyperref}
+% \usepackage{float}
+
+\usepackage{microtype} % for better typesetting
 \usepackage{amsmath,amsfonts,amsthm,bm}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{floatrow}
+% remove this if you won't use fancy verbatim environments
+% \usepackage{fancyvrb}
+
+\usepackage{geometry} % for setting custom margins
+\usepackage{dcolumn}        % improved alignment of table columns
+\usepackage{paralist}       % improved enumerate and itemize
+
+%% Custom packages
+\usepackage[htt]{hyphenat} % for breaking long typefont lines in texttt
+\usepackage{fvextra} % for breaklines in verbatim environments (extension of fancyvrb)
+\usepackage{array} % for fixed column width
+\usepackage{multirow} % for borders and merged ranges
+\usepackage{soul} % for underlines
+\usepackage{geometry} % for setting custom margins
+\usepackage{pdflscape} % for landscape pages
+\usepackage{tabularx} % for tables (auto width)
+\usepackage[export]{adjustbox} % for wide tables/figures
+\usepackage{changepage} % for wide tables
+\usepackage{float} % for H positioning of tables/figures
+\usepackage{dirtytalk} % for quotes using \say
+\usepackage{enumitem} % for custom enumeration
+% \usepackage{svg} % for SVG images
+\usepackage{caption} % for table captions on the top, also for longlisting captions
+\usepackage[newfloat, outputdir=.output]{minted} % for code listings
+
+\usepackage{url} % for URLs
+\usepackage{xurl} % for long URLs
+% hyperref to be included as the last package (except for cleveref and some other packages)
+\usepackage{hyperref} % for clickable links
+\usepackage{nameref} % for named references
+\usepackage[acronym, toc, automake]{glossaries} % for glossaries
+\usepackage[para,online,flushleft]{threeparttable} % for table notes
 
 % Bibliography formatting.
 % CHECK THE REQUIREMENTS OF YOUR DEPARTMENT AND FACULTY ON THE CITATION FORMAT!
@@ -88,9 +134,6 @@
 % load the file with bibliography entries
 \addbibresource{refs.bib}
 
-% remove this if you won't use fancy verbatim environments
-\usepackage{fancyvrb}
-
 % remove this if you won't typeset TikZ graphics
 \usepackage{tikz}
 \usetikzlibrary{positioning} %add libraries as needed (shapes, decorations, ...)
@@ -100,13 +143,22 @@
 \usepackage{algorithm}
 
 % remove this if you won't list any source code
-\usepackage{listings}
+% \usepackage{listings}
 
 
 \hypersetup{unicode}
 \hypersetup{breaklinks=true}
 
 \usepackage[noabbrev]{cleveref}
+
+%%% Some customizations 
+% \usemintedstyle{vs} % for Visual Studio Code style
+\fvset{breaklines=true, breakanywhere} % for breaklines in verbatim environments
+\newenvironment{longlisting}{\captionsetup{type=listing}}{} % for long listings
+\definecolor{LightGray}{gray}{0.9} % for listing background color
+
+% Definitions of all glossary/acronym entries
+\input{glossaries}
 
 \input{todos} % remove this before compiling the final version
 
@@ -119,12 +171,26 @@
 
 \tableofcontents
 
-\include{intro}
-\include{ch1}
-\include{ch2}
-\include{ch3}
-\include{conclusion}
+\include{intro} 
+\include{ch_problem}
 \include{bibliography}
+
+
+%%% Figures used in the thesis (consider if this is needed)
+\listoffigures
+
+%%% Tables used in the thesis (consider if this is needed)
+%%% In mathematical theses, it could be better to move the list of tables to the beginning of the thesis.
+\listoftables
+
+%%% Listings used in the thesis (consider if this is needed)
+\listoflistings
+
+%%% Abbreviations used in the thesis, if any, including their explanation
+%%% In mathematical theses, it could be better to move the list of abbreviations to the beginning of the thesis.
+\printglossary[type=\acronymtype, title=List of Abbreviations, toctitle=List of Abbreviations]
+
+\printglossary
 
 \appendix
 \include{howto}

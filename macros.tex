@@ -44,14 +44,9 @@
 % asymptotic complexity
 \newcommand{\asy}[1]{\mathcal{O}(#1)}
 
-% listings and default lstlisting config (remove if unused)
-\DeclareNewFloatType{listing}{}
-\floatsetup[listing]{style=ruled}
-
 \DeclareCaptionStyle{thesis}{style=base,font={small,sf},labelfont=bf,labelsep=quad}
 \captionsetup{style=thesis}
 \captionsetup[algorithm]{style=thesis,singlelinecheck=off}
-\captionsetup[listing]{style=thesis,singlelinecheck=off}
 
 % Customization of algorithmic environment (comment style)
 \renewcommand{\algorithmiccomment}[1]{\textcolor{black!25}{\dotfill\sffamily\itshape#1}}
@@ -75,18 +70,6 @@
 % comments in the example table in `ch2.tex` for details.
 %\floatsetup[table]{capposition=top,framefit=yes}
 
-\ifEN\floatname{listing}{Listing}
-\else\floatname{listing}{Výpis kódu}\fi
-\lstset{ % use this to define styling for any other language
-  language=C++,
-  tabsize=2,
-  showstringspaces=false,
-  basicstyle=\footnotesize\tt\color{black!75},
-  identifierstyle=\bfseries\color{black},
-  commentstyle=\color{green!50!black},
-  stringstyle=\color{red!50!black},
-  keywordstyle=\color{blue!75!black}}
-
 % Czech versions of the used cleveref references (It's not as convenient as in
 % English because of declension, cleveref is limited to sg/pl nominative. Use
 % plain \ref to dodge that.)
@@ -103,8 +86,6 @@
 \Crefname{figure}{Obrázek}{Obrázky}
 \crefname{table}{tabulka}{tabulky}
 \Crefname{table}{Tabulka}{Tabulky}
-\crefname{listing}{výpis}{výpisy}
-\Crefname{listing}{Výpis}{Výpisy}
 \floatname{algorithm}{Algoritmus}
 \crefname{algorithm}{algoritmus}{algoritmy}
 \Crefname{algorithm}{Algoritmus}{Algoritmy}

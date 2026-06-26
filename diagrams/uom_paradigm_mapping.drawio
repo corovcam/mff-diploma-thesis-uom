@@ -1,0 +1,72 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram id="4zbYV3DT2hE-RpNETes1" name="Page-1">
+    <mxGraphModel dx="1028" dy="707" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="qem8xiL9-qcaIlcroFmn-6" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Relational&lt;/font&gt;&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" vertex="1" parent="1">
+          <mxGeometry x="30" y="50" width="260" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="qem8xiL9-qcaIlcroFmn-5" value="&lt;p&gt;&lt;b&gt;Graph&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" vertex="1" parent="1">
+          <mxGeometry x="470" y="50" width="240" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="qem8xiL9-qcaIlcroFmn-4" value="&lt;p&gt;&lt;b&gt;Graph&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" vertex="1" parent="1">
+          <mxGeometry x="150" y="430" width="460" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="relTitle" value="Relational — EFCore, NHibernate, Dapper (source)" style="text;html=1;align=center;fontStyle=1;fillColor=none" parent="1" vertex="1">
+          <mxGeometry x="10" y="20" width="300" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="tCust" value="&lt;b&gt;Customers&lt;/b&gt;&lt;br&gt;PK CustomerID : int&lt;br&gt;CustomerName : nvarchar" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+          <mxGeometry x="40" y="100" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tOrd" value="&lt;b&gt;Orders&lt;/b&gt;&lt;br&gt;PK OrderID : int&lt;br&gt;FK CustomerID : int&lt;br&gt;Date : datetime" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+          <mxGeometry x="40" y="250" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fk" value="(1,n)&lt;br&gt;FK" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0" parent="1" source="tCust" target="tOrd" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="docTitle" value="Document — Spring Data MongoDB (target ODM)" style="text;html=1;align=center;fontStyle=1;fillColor=none" parent="1" vertex="1">
+          <mxGeometry x="430" y="20" width="320" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="docCust" value="&lt;b&gt;customers  (collection)&lt;/b&gt;&lt;br&gt;_id : ObjectId&lt;br&gt;customerName : string&lt;br&gt;@DocumentReference orders : [ ref ]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+          <mxGeometry x="480" y="90" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="docOrd" value="&lt;b&gt;orders  (collection)&lt;/b&gt;&lt;br&gt;_id : ObjectId&lt;br&gt;date : date" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+          <mxGeometry x="480" y="280" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="docRef" value="reference&#xa;(vs. embed)" style="endArrow=open;html=1;dashed=1;strokeColor=#82b366" parent="1" source="docCust" target="docOrd" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="grTitle" value="Graph — Spring Data Neo4j (target OGM)" style="text;html=1;align=center;fontStyle=1;fillColor=none" parent="1" vertex="1">
+          <mxGeometry x="385" y="400" width="260" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="nCust" value="&lt;b&gt;:Customer&lt;/b&gt;&lt;br&gt;customerName" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
+          <mxGeometry x="170" y="454" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nOrd" value="&lt;b&gt;:Order&lt;/b&gt;&lt;br&gt;date" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
+          <mxGeometry x="440" y="454" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rel" value=":PLACED" style="endArrow=block;html=1;strokeColor=#d79b00;fontStyle=2" parent="1" source="nCust" target="nOrd" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tr1" value="translate&#xa;(embed / reference)" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#6c8ebf;fontStyle=1;exitX=1.005;exitY=0.271;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.002;entryY=0.274;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="qem8xiL9-qcaIlcroFmn-6" target="qem8xiL9-qcaIlcroFmn-5" edge="1">
+          <mxGeometry x="-0.0061" y="23" relative="1" as="geometry">
+            <mxPoint x="300" y="140" as="sourcePoint" />
+            <mxPoint x="480" y="140" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tr2" value="translate&#xa;(node + relationship)" style="endArrow=block;html=1;strokeWidth=2;strokeColor=#d79b00;fontStyle=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="qem8xiL9-qcaIlcroFmn-4" edge="1">
+          <mxGeometry x="-0.2031" y="20" relative="1" as="geometry">
+            <mxPoint x="290" y="290" as="sourcePoint" />
+            <mxPoint x="380" y="420" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="380" y="290" />
+            </Array>
+            <mxPoint x="-20" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

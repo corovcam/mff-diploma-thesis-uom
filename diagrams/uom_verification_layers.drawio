@@ -1,0 +1,28 @@
+<mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <mxCell id="gen" value="generate_translation&#10;(LLM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4e1f5;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="40" y="120" width="140" height="70" as="geometry"/></mxCell>
+
+    <mxCell id="l1" value="Layer 1 — Grounded generation&#10;&#10;pinned API manifest, live schema, few-shot examples injected&#10;&#10;prevents: hallucinated APIs &amp; versions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="220" y="80" width="180" height="150" as="geometry"/></mxCell>
+    <mxCell id="l2" value="Layer 2 — It must compile&#10;&#10;build in isolated .NET 10 / Java 25 sandbox&#10;&#10;rejects: non-compiling code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="430" y="80" width="180" height="150" as="geometry"/></mxCell>
+    <mxCell id="l3" value="Layer 3 — Same data&#10;&#10;execute both queries on live DBs; tolerant structural diff (DeepDiff)&#10;&#10;rejects: semantic drift" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="640" y="80" width="180" height="150" as="geometry"/></mxCell>
+    <mxCell id="l4" value="Layer 4 — Independent judge&#10;&#10;separate model reviews all evidence&#10;&#10;ACCEPT / REJECT + explanation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="850" y="80" width="180" height="150" as="geometry"/></mxCell>
+
+    <mxCell id="accept" value="ACCEPT&#10;return verified code" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="880" y="320" width="150" height="60" as="geometry"/></mxCell>
+
+    <mxCell id="repair" value="Bounded self-repair  (&#8804; 3 attempts)&#10;regenerate with captured error logs  &#8594;  then human hand-off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="220" y="420" width="600" height="60" as="geometry"/></mxCell>
+
+    <mxCell id="ce1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gen" target="l1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ce2" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l1" target="l2"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ce3" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l2" target="l3"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ce4" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l3" target="l4"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ce5" value="ACCEPT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l4" target="accept"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <mxCell id="cf2" value="fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="l2" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="cf3" value="drift" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="l3" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="cf4" value="REJECT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="l4" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="cf5" value="regenerate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="repair" target="gen"><mxGeometry relative="1" as="geometry"/></mxCell>
+  </root>
+</mxGraphModel>
