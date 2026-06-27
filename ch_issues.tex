@@ -1,0 +1,20 @@
+\chapter{Project Issues and Mitigations}
+\label{chap:issues}
+
+% TODO: maybe rename to "discussion" or something else before conclusion
+
+% explain what issues were encountered during the project, how they were mitigated, and what lessons were learned
+% what to expect when building a similar pipeline
+% threats to validity
+
+% daytona went closed-source
+% e-INFRA unstable API providers; non-openAI compatible; latency during experiments; deprecatetion of models during experiments; 
+% model availability; model quality; model cost; model latency; model context window; huge token count
+% comparison with SOTA, Claude
+% structured output cannot be used with chosen provider; had to shift to tool calling
+% long outputs are truncated by the provider; model is unable to generate long outputs EVEN though it should be able to based on paper - long context window
+% kimi-k2.6 vs kimi-k2.7-code - not really upgrade for coding
+% qwen3.5 122B non-thinking better than kimi-k2.6 1T parameter model for code generation;
+% why for graph-based approaches its better to use simpler model vs. ReAct agent
+% why we switched to ReAct agent in generate_translation_node from simple model call (prompt + structured output)
+
