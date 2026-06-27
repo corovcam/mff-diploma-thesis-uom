@@ -1,2 +1,33 @@
 \chapter{Design Decisions and Orchestration}
 \label{chap:design}
+
+\section{Free ReAct Agent versus Orchestrated Semi-Deterministic Graph}
+\label{sec:design-agent-vs-graph}
+
+% Comparison of ReAct vs. LangGraph graph as in my presentation
+
+\section{State and Stateless Nodes}
+\label{sec:design-state}
+
+% Show graph state and its values
+% Explain a general stateless node in LangGraph
+
+\section{Keeping the Reasoning Context Clean}
+\label{sec:design-isolation}
+
+% Explain why we isolate context; saving build logs, huge JSON, DeepDiff logs, etc. in the context leading to context explosion and hallucination
+
+\section{Parallel Validation}
+\label{sec:design-parallel}
+
+% Explain how we parallelize dotnet/java validation -> DeepDiff -> judge
+
+\section{Bounded Loops, Retries, and Fallbacks}
+\label{sec:design-bounds}
+
+% model fallbacks; constant number of self-correction retries; retries on node level; exception handling
+
+\section{Extensibility: Adding a Framework Is Mechanical}
+\label{sec:design-extensibility}
+
+% 4 steps: build files, validation harness, few-shot examples, sandbox configuration (Dockerfile + setup scripts)

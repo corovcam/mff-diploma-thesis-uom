@@ -1,2 +1,43 @@
 \chapter{Correctness, Validation, and Equivalence}
 \label{chap:validation}
+
+\section{Four Layers of Verification}
+\label{sec:validation-layers}
+
+% summary of the four layers; some chart
+
+\section{Layer 1: Grounded Generation}
+\label{sec:validation-grounding}
+
+% pom.xml, .csproj, schema inspection, few-shot examples, how they are injected into the prompt; what the model sees and what it outputs; how the output is structured and validated against the schema; how the output is used in the next step
+
+\section{Layer 2: Compilation and Execution in Sandboxes}
+\label{sec:validation-sandbox}
+
+% Daytona; how to build bash scripts run in Daytona sandboxes; transportation of files using base64; outputs of build tools, how long they are
+
+\section{Layer 3: Semantic Equivalence}
+\label{sec:validation-equivalence}
+
+
+% explain entire DeepDiff algorithm using pseudocode; show JSON values; how they are compared; how the diff is tolerant to field order and rounding; what output to expect from DeepDiff; how it is passed to Judge
+% reference ExeCoder a lot
+
+\subsection{Tolerant comparison}
+
+% how we defined tolerance threshold (LLM decides), but mostly JSONSerializer in services; why the JSONs have the same structure:
+% differences in JSON serializers: Datetime, floating point, null, DateTime -> ZonedDateTime only, arrays/objects, field order
+
+\subsection{The swapped-sorting robustness check}
+
+% why we check firstSample-firstSample and lastSample-lastSample, and then firstSample-lastSample + lastSample-firstSample as well; threat to validity in terms of deterministic sorting
+
+\section{Layer 4: The Independent Judge}
+\label{sec:validation-judge}
+
+% context it gets; output it generates; conditional edge after decides whether to go back to translation or END and show the user final translation
+
+\section{Why the Result Can Be Trusted}
+\label{sec:validation-trust}
+
+% summary of the above; or omit

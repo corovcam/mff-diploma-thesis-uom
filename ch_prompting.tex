@@ -1,2 +1,29 @@
 \chapter{Prompt and Context Engineering}
 \label{chap:prompting}
+
+\section{One Prompt per Node, Not One Agent}
+\label{sec:prompting-per-node}
+
+% explain per-node system + human prompts; more of a summary
+
+\section{Grounded Generation}
+\label{sec:prompting-grounding}
+
+% what leads to generate_translation_node, what is injected into the prompt, what is the output schema, how it is dynamically built
+
+\section{The Translation Contract and Framework Rules}
+\label{sec:prompting-contract}
+
+% specific rules inside system prompt PER-framework; what is the translation contract; how it is enforced; how it is used in the prompt
+
+\section{Structured Output Shaped to the Request}
+\label{sec:prompting-structured}
+
+% TODO: this may change; now using tool to save data instead of structured output
+% what the transltio node outputs: structured JSON;
+% add here whole pydantic class OR better JSON schema generated from Pydantic class
+
+\section{Context Engineering and Migration Context Management}
+\label{sec:prompting-context}
+
+% what exact tools the schema_inspection and generate_translation get; mention snippets in appendix
