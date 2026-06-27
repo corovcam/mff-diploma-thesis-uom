@@ -1,46 +1,52 @@
-<mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1500" math="0" shadow="0">
-  <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
+<mxfile host="Electron" agent="Mozilla/5.0" version="27.0.9">
+  <diagram id="uom-state-machine" name="State Machine">
+    <mxGraphModel dx="1100" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1320" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
 
-    <mxCell id="start" value="START" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="360" y="20" width="100" height="44" as="geometry"/></mxCell>
-    <mxCell id="extract" value="extract_input&#10;parse code, frameworks, type" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="320" y="110" width="200" height="48" as="geometry"/></mxCell>
-    <mxCell id="gExtract" value="inputs&#10;present?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="365" y="200" width="110" height="80" as="geometry"/></mxCell>
-    <mxCell id="schema" value="schema_inspection&#10;gather live DB context via MCP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="320" y="330" width="200" height="48" as="geometry"/></mxCell>
-    <mxCell id="generate" value="generate_translation&#10;grounded, structured generation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4e1f5;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="320" y="420" width="200" height="48" as="geometry"/></mxCell>
-    <mxCell id="gTrans" value="translation&#10;type?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="365" y="510" width="110" height="80" as="geometry"/></mxCell>
-    <mxCell id="valSchema" value="prep + validate_schema&#10;compile in sandbox" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="90" y="516" width="190" height="48" as="geometry"/></mxCell>
-    <mxCell id="gSchema" value="schema&#10;passed?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="120" y="610" width="110" height="80" as="geometry"/></mxCell>
-    <mxCell id="valQuery" value="prep + validate_query&#10;compile &amp; run source + target (parallel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="315" y="630" width="210" height="50" as="geometry"/></mxCell>
-    <mxCell id="gQuery" value="both&#10;compiled &amp; ran?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="365" y="720" width="110" height="80" as="geometry"/></mxCell>
-    <mxCell id="equiv" value="prep + check_query_equivalence&#10;tolerant structural diff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="315" y="830" width="210" height="48" as="geometry"/></mxCell>
-    <mxCell id="judge" value="evaluation_node (LLM judge)&#10;ACCEPT / REJECT + explanation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="315" y="910" width="210" height="50" as="geometry"/></mxCell>
-    <mxCell id="gEval" value="verdict?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="365" y="1000" width="110" height="80" as="geometry"/></mxCell>
-    <mxCell id="human" value="human_intervention&#10;pause for user feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="610" y="1006" width="190" height="50" as="geometry"/></mxCell>
-    <mxCell id="end" value="END&#10;return verified code" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="350" y="1120" width="140" height="50" as="geometry"/></mxCell>
+        <mxCell id="start" value="START" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="375" y="30" width="100" height="44" as="geometry"/></mxCell>
+        <mxCell id="extract" value="&lt;b&gt;extract_input&lt;/b&gt;&lt;br&gt;parse code, frameworks, type" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="120" width="190" height="48" as="geometry"/></mxCell>
+        <mxCell id="gExtract" value="inputs&#10;present?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="370" y="210" width="110" height="80" as="geometry"/></mxCell>
+        <mxCell id="schema" value="&lt;b&gt;schema_inspection&lt;/b&gt;&lt;br&gt;gather live DB context (MCP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="330" y="330" width="190" height="48" as="geometry"/></mxCell>
+        <mxCell id="generate" value="&lt;b&gt;generate_translation&lt;/b&gt;&lt;br&gt;grounded, structured generation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontStyle=0" vertex="1" parent="1"><mxGeometry x="330" y="420" width="190" height="48" as="geometry"/></mxCell>
+        <mxCell id="gTrans" value="translation&#10;type?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="370" y="510" width="110" height="80" as="geometry"/></mxCell>
+        <mxCell id="valSchema" value="&lt;b&gt;validate_schema&lt;/b&gt;&lt;br&gt;compile in sandbox" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="70" y="516" width="180" height="48" as="geometry"/></mxCell>
+        <mxCell id="gSchema" value="schema&#10;passed?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="105" y="620" width="110" height="80" as="geometry"/></mxCell>
+        <mxCell id="valQuery" value="&lt;b&gt;validate_query&lt;/b&gt;&lt;br&gt;compile &amp; run source + target&lt;br&gt;(in parallel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="325" y="630" width="200" height="56" as="geometry"/></mxCell>
+        <mxCell id="gQuery" value="both compiled&#10;&amp; ran?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="370" y="720" width="110" height="80" as="geometry"/></mxCell>
+        <mxCell id="equiv" value="&lt;b&gt;check_query_equivalence&lt;/b&gt;&lt;br&gt;tolerant structural diff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1"><mxGeometry x="325" y="830" width="200" height="48" as="geometry"/></mxCell>
+        <mxCell id="judge" value="&lt;b&gt;evaluation_node&lt;/b&gt; (LLM judge)&lt;br&gt;ACCEPT / REJECT + explanation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="325" y="910" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="gEval" value="verdict?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1"><mxGeometry x="370" y="1000" width="110" height="80" as="geometry"/></mxCell>
+        <mxCell id="human" value="&lt;b&gt;human_intervention&lt;/b&gt;&lt;br&gt;pause for user feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="650" y="1006" width="190" height="50" as="geometry"/></mxCell>
+        <mxCell id="end" value="&lt;b&gt;END&lt;/b&gt;&lt;br&gt;return verified code" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="355" y="1130" width="150" height="50" as="geometry"/></mxCell>
 
-    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="start" target="extract"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="extract" target="gExtract"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e3" value="present" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gExtract" target="schema"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e4" value="missing, loop &lt; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1" edge="1" parent="1" source="gExtract" target="extract"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e5" value="fail (max loops)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gExtract" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="schema" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="generate" target="gTrans"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e8" value="SCHEMA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gTrans" target="valSchema"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e9" value="QUERY / BOTH" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gTrans" target="valQuery"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="valSchema" target="gSchema"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e11" value="passed &amp; BOTH" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gSchema" target="valQuery"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e12" value="passed &amp; SCHEMA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gSchema" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e13" value="failed, loop &lt; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="gSchema" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="valQuery" target="gQuery"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e15" value="both passed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gQuery" target="equiv"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e16" value="compile/run failed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gQuery" target="judge"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="equiv" target="judge"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="judge" target="gEval"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e19" value="ACCEPT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="gEval" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e20" value="REJECT, loop &lt; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="gEval" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e21" value="loop &#8805; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gEval" target="human"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e22" value="schema failed, loop &#8805; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gSchema" target="human"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="e23" value="user feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1" edge="1" parent="1" source="human" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
-  </root>
-</mxGraphModel>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;&#9679; blue = LLM node&amp;nbsp;&amp;nbsp; &#9679; green = sandbox/diff node&lt;br&gt;&#9670; yellow = routing gate&amp;nbsp;&amp;nbsp; &#9679; red = human hand-off&lt;br&gt;&#8212;&#8212; solid = success path&amp;nbsp;&amp;nbsp; - - - red dashed = repair loop" style="text;html=1;align=left;verticalAlign=top;fillColor=#fbfbfb;strokeColor=#cccccc;rounded=1;spacing=8;fontSize=11" vertex="1" parent="1"><mxGeometry x="40" y="780" width="250" height="90" as="geometry"/></mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="start" target="extract"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="extract" target="gExtract"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="present" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gExtract" target="schema"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="missing, loop &lt; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1" edge="1" parent="1" source="gExtract" target="extract"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="fail (max loops)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gExtract" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="schema" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="generate" target="gTrans"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="SCHEMA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gTrans" target="valSchema"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="QUERY / BOTH" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gTrans" target="valQuery"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="valSchema" target="gSchema"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="passed &amp; BOTH" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gSchema" target="valQuery"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" value="passed &amp; SCHEMA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gSchema" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" value="failed, loop &lt; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="gSchema" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="valQuery" target="gQuery"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e15" value="both passed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gQuery" target="equiv"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e16" value="compile/run failed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gQuery" target="judge"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="equiv" target="judge"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="judge" target="gEval"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e19" value="ACCEPT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="gEval" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e20" value="REJECT, loop &lt; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="gEval" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e21" value="loop &#8805; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gEval" target="human"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e22" value="schema failed, loop &#8805; 3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450" edge="1" parent="1" source="gSchema" target="human"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e23" value="user feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1" edge="1" parent="1" source="human" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

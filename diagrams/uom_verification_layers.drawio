@@ -1,28 +1,33 @@
-<mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
-  <root>
-    <mxCell id="0"/>
-    <mxCell id="1" parent="0"/>
+<mxfile host="Electron" agent="Mozilla/5.0" version="27.0.9">
+  <diagram id="uom-verification-layers" name="Verification Layers">
+    <mxGraphModel dx="1100" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1160" pageHeight="560" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
 
-    <mxCell id="gen" value="generate_translation&#10;(LLM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4e1f5;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="40" y="120" width="140" height="70" as="geometry"/></mxCell>
+        <mxCell id="title" value="Four independent layers of verification — a candidate is returned only if it clears all four" style="text;html=1;align=center;fontStyle=1;fontSize=13;fillColor=none" vertex="1" parent="1"><mxGeometry x="60" y="10" width="1040" height="26" as="geometry"/></mxCell>
 
-    <mxCell id="l1" value="Layer 1 — Grounded generation&#10;&#10;pinned API manifest, live schema, few-shot examples injected&#10;&#10;prevents: hallucinated APIs &amp; versions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="220" y="80" width="180" height="150" as="geometry"/></mxCell>
-    <mxCell id="l2" value="Layer 2 — It must compile&#10;&#10;build in isolated .NET 10 / Java 25 sandbox&#10;&#10;rejects: non-compiling code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="430" y="80" width="180" height="150" as="geometry"/></mxCell>
-    <mxCell id="l3" value="Layer 3 — Same data&#10;&#10;execute both queries on live DBs; tolerant structural diff (DeepDiff)&#10;&#10;rejects: semantic drift" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="640" y="80" width="180" height="150" as="geometry"/></mxCell>
-    <mxCell id="l4" value="Layer 4 — Independent judge&#10;&#10;separate model reviews all evidence&#10;&#10;ACCEPT / REJECT + explanation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;spacingTop=8" vertex="1" parent="1"><mxGeometry x="850" y="80" width="180" height="150" as="geometry"/></mxCell>
+        <mxCell id="gen" value="&lt;b&gt;generate_translation&lt;/b&gt;&lt;br&gt;(LLM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e" vertex="1" parent="1"><mxGeometry x="40" y="150" width="140" height="80" as="geometry"/></mxCell>
 
-    <mxCell id="accept" value="ACCEPT&#10;return verified code" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1" vertex="1" parent="1"><mxGeometry x="880" y="320" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="l1" value="&lt;b&gt;Layer 1&lt;/b&gt;&lt;br&gt;Grounded generation&lt;br&gt;&lt;br&gt;pinned API manifest, live schema, and few-shot examples injected&lt;br&gt;&lt;br&gt;&lt;i&gt;prevents&lt;/i&gt; hallucinated APIs &amp; versions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;spacingTop=10;fontSize=11" vertex="1" parent="1"><mxGeometry x="220" y="100" width="190" height="180" as="geometry"/></mxCell>
+        <mxCell id="l2" value="&lt;b&gt;Layer 2&lt;/b&gt;&lt;br&gt;It must compile&lt;br&gt;&lt;br&gt;build in an isolated .NET 10 / Java 25 sandbox&lt;br&gt;&lt;br&gt;&lt;i&gt;rejects&lt;/i&gt; non-compiling code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=10;fontSize=11" vertex="1" parent="1"><mxGeometry x="450" y="100" width="190" height="180" as="geometry"/></mxCell>
+        <mxCell id="l3" value="&lt;b&gt;Layer 3&lt;/b&gt;&lt;br&gt;It must return the same data&lt;br&gt;&lt;br&gt;execute both queries on live DBs; tolerant structural diff (DeepDiff)&lt;br&gt;&lt;br&gt;&lt;i&gt;rejects&lt;/i&gt; semantic drift" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=10;fontSize=11" vertex="1" parent="1"><mxGeometry x="680" y="100" width="190" height="180" as="geometry"/></mxCell>
+        <mxCell id="l4" value="&lt;b&gt;Layer 4&lt;/b&gt;&lt;br&gt;Independent judge&lt;br&gt;&lt;br&gt;a separate model reviews all evidence&lt;br&gt;&lt;br&gt;&lt;i&gt;decides&lt;/i&gt; ACCEPT / REJECT + explanation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;verticalAlign=top;spacingTop=10;fontSize=11" vertex="1" parent="1"><mxGeometry x="910" y="100" width="190" height="180" as="geometry"/></mxCell>
 
-    <mxCell id="repair" value="Bounded self-repair  (&#8804; 3 attempts)&#10;regenerate with captured error logs  &#8594;  then human hand-off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1"><mxGeometry x="220" y="420" width="600" height="60" as="geometry"/></mxCell>
+        <mxCell id="accept" value="&lt;b&gt;ACCEPT&lt;/b&gt;&lt;br&gt;return verified code" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0" vertex="1" parent="1"><mxGeometry x="935" y="360" width="150" height="64" as="geometry"/></mxCell>
+        <mxCell id="repair" value="&lt;b&gt;Bounded self-repair&lt;/b&gt;  (&#8804; 3 attempts)&lt;br&gt;regenerate with the captured error logs&amp;nbsp;&amp;nbsp;&#8594;&amp;nbsp;&amp;nbsp;then human hand-off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12" vertex="1" parent="1"><mxGeometry x="220" y="450" width="650" height="64" as="geometry"/></mxCell>
 
-    <mxCell id="ce1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gen" target="l1"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="ce2" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l1" target="l2"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="ce3" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l2" target="l3"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="ce4" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l3" target="l4"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="ce5" value="ACCEPT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366" edge="1" parent="1" source="l4" target="accept"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ce1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block" edge="1" parent="1" source="gen" target="l1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ce2" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366;fontColor=#2d7600" edge="1" parent="1" source="l1" target="l2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ce3" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366;fontColor=#2d7600" edge="1" parent="1" source="l2" target="l3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ce4" value="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366;fontColor=#2d7600" edge="1" parent="1" source="l3" target="l4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ce5" value="ACCEPT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#82b366;fontColor=#2d7600" edge="1" parent="1" source="l4" target="accept"><mxGeometry relative="1" as="geometry"/></mxCell>
 
-    <mxCell id="cf2" value="fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="l2" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="cf3" value="drift" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="l3" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="cf4" value="REJECT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="l4" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
-    <mxCell id="cf5" value="regenerate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1" edge="1" parent="1" source="repair" target="gen"><mxGeometry relative="1" as="geometry"/></mxCell>
-  </root>
-</mxGraphModel>
+        <mxCell id="cf2" value="fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1;fontColor=#a01a16" edge="1" parent="1" source="l2" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="cf3" value="drift" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1;fontColor=#a01a16" edge="1" parent="1" source="l3" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="cf4" value="REJECT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1;fontColor=#a01a16" edge="1" parent="1" source="l4" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="cf5" value="regenerate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#b85450;dashed=1;fontColor=#a01a16" edge="1" parent="1" source="repair" target="gen"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

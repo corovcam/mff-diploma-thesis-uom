@@ -22,6 +22,8 @@ The overarching goal is an assistant that, given the database-layer artifacts of
   \item[G4 -- Usability and Observability.] Deliver the assistant as an interactive \Acrfull{ui}, in which a user submits source artifacts, watches the translation proceed step by step, inspects every intermediate result, and intervenes when necessary. Every run is fully traced and reproducible.
   
   \item[G5 -- Experimental Evaluation.] Demonstrate that the assistant meets the above goals through a systematic evaluation (\cref{chap:evaluation}) that measures correctness, robustness, and the amount of human intervention required through quantitative and statistical metrics.
+
+  \item[G6 -- Empirical Grounding of the Source Frameworks.] Quantify the raw, framework-attributable time and memory overhead of the supported .NET source frameworks (Entity Framework Core, NHibernate, and Dapper) with the database execution removed from the measurement, establishing the cost baseline that motivates the migration problem and frames any future performance-aware target selection (\cref{chap:overhead}). This is a characterization, not an optimization (cf.\ non-goal N2 below).
 \end{description}
 
 Note that, the construction of the theoretical background for the assistant and its experimental validation are the subject of this thesis; the implementation itself was first delivered as a research project implemented by the author of this thesis within the \emph{Adaptive Data Management (ADaM) research group}, and it builds on the rule-based \emph{ORMorpher} line of work \cite{abrahamORMorpherInteractiveFramework2026, abrahamFrameworkAgnosticQueryAdaptation2025}. \Cref{chap:related} positions the thesis against that background.
@@ -50,7 +52,7 @@ Equally important is what the assistant is \emph{not} expected to do. Stating no
 
 The assistant translates from three .NET relational source frameworks into two Java Spring Data non-relational targets (as part of Spring Boot\footnote{\url{https://spring.io/projects/spring-boot}} ecosystem). The source side covers the three dominant access styles in the .NET ecosystem: a full ORM with LINQ\footnote{\url{https://learn.microsoft.com/en-us/dotnet/csharp/linq/}} (Entity Framework Core), a mature ORM with its own query language (NHibernate with LINQ\footnote{\url{https://nhibernate.info/doc/nhibernate-reference/querylinq.html}} or HQL\footnote{\url{https://nhibernate.info/doc/nhibernate-reference/queryhql.html}}), and a thin micro-ORM over raw SQL~\cite{kalecheva-ansi-2023-standard} (Dapper). The target side covers the two principal non-relational paradigms: document-based (Spring Data MongoDB) and graph-based (Spring Data Neo4j) submodules of the Spring Data module. \Cref{tab:scope} summarizes the supported frameworks, their data models, query interfaces, and the pinned versions used throughout the thesis.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Supported frameworks, data models, query interfaces, and pinned versions. The source frameworks run on .NET~10; the target frameworks on Java~25 / Spring~Boot~4.0.}
 \label{tab:scope}
@@ -81,7 +83,7 @@ To make the problem concrete -- and to provide a thread that recurs through the 
 
 \Cref{lst:ex-source-schema} shows the source \emph{schema}: a \texttt{Customer} entity in Entity Framework Core, mapped to a relational table and holding a one-to-many association to its orders by foreign key. \Cref{lst:ex-source-query} shows the source \emph{query}, expressed in LINQ: all customers that have at least one order placed after a cut-off date.
 
-\begin{listing}[t]
+\begin{listing}[H]
 \begin{minted}[linenos, breaklines, frame=single]{csharp}
 [Table("Customers", Schema = "Sales")]
 public class Customer
@@ -96,7 +98,7 @@ public class Customer
 \label{lst:ex-source-schema}
 \end{listing}
 
-\begin{listing}[t]
+\begin{listing}[H]
 \begin{minted}[linenos, breaklines, frame=single]{csharp}
 // Customers with at least one order placed after a cut-off date.
 db.Customers
@@ -108,48 +110,117 @@ db.Customers
 
 \subsection{Output: the target artifacts}
 
-\Cref{lst:ex-target-schema} shows the translated \emph{schema} in Spring Data MongoDB. The relational table becomes a \texttt{@Document} collection, the integer primary key is mapped to the document identifier, and -- crucially -- the foreign-key association must be modelled explicitly as either an \emph{embedded} sub-document or a \emph{reference}. The two choices lead to materially different documents and to different queries with different performance and memory characteristics; here the orders are kept as a reference. \Cref{lst:ex-target-query} shows the translated \emph{query}: the LINQ \texttt{\.Any} over a navigation property becomes a MongoDB aggregation pipeline that joins the referenced collection and matches on the date, and must return the same customers as the source.
+Crucially, there is no single ``correct'' target. The same source admits several idiomatic translations, because each target framework offers more than one way to model the relationship and to express the query over it -- and each choice produces different schema annotations, a different query idiom, and different performance and memory characteristics,\footnote{The embed-versus-reference trade-off and its read/write and storage implications are discussed in MongoDB's data-modeling guidance: \url{https://www.mongodb.com/docs/manual/data-modeling/}.} while all must return the same customers. To make this concrete, we give three valid translations of the running example: two in Spring Data MongoDB (the orders \emph{referenced} in a separate collection, and the orders \emph{embedded} inside the customer document) and one in Spring Data Neo4j (the orders reached over a graph \emph{relationship}). Choosing among them is exactly the modelling decision the assistant -- or its user -- must make.
 
-\begin{listing}[t]
+\paragraph{Option A: MongoDB with referenced documents.}
+\Cref{lst:ex-target-schema} keeps orders in their own collection and links them with the \texttt{@DocumentReference} annotation;\footnote{Spring Data MongoDB document references: \url{https://docs.spring.io/spring-data/mongodb/reference/mongodb/mapping/document-references.html}.} the integer primary key becomes the document identifier and each column maps to a \texttt{@Field}. Because the orders live in a separate collection, the LINQ \texttt{.Any} over a navigation property becomes a MongoDB \emph{aggregation pipeline} (\cref{lst:ex-target-query}) that \texttt{\$lookup}-joins\footnote{MongoDB \texttt{\$lookup} aggregation stage: \url{https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/}.} the \texttt{orders} collection and then matches on the date.
+
+\begin{listing}[H]
 \begin{minted}[linenos, breaklines, frame=single]{java}
 @Document("customers")
 class Customer {
     @Id String id;
-    String customerName;
-    @DocumentReference List<Order> orders;
+    @Field("customerName") String customerName;
+    @DocumentReference List<Order> orders;   // joined from a separate collection
 }
 \end{minted}
-\caption{Target schema -- a Spring Data MongoDB document. The foreign-key association becomes an explicit reference (the embed-versus-reference decision is a real modelling choice).}
+\caption{Target schema, option~A -- Spring Data MongoDB with the orders held as a \texttt{@DocumentReference} (inter-document, normalized).}
 \label{lst:ex-target-schema}
 \end{listing}
 
-\begin{listing}[t]
+\begin{listing}[H]
 \begin{minted}[linenos, breaklines, frame=single]{java}
-// Equivalent MongoDB query using the aggregation pipeline.
+// Referenced variant: $lookup-join the orders collection, then match on date.
 var agg = Aggregation.newAggregation(
-    Aggregation.lookup("orders", "orders", "_id", "orders"),
+    Aggregation.lookup("orders", "_id", "customerId", "orders"),
     Aggregation.match(Criteria.where("orders.date").gt(cutoff))
 );
-mongoTemplate
+return mongoTemplate
     .aggregate(agg, "customers", Customer.class)
     .getMappedResults();
 \end{minted}
-\caption{Target query -- the LINQ expression of \cref{lst:ex-source-query} as an equivalent MongoDB aggregation pipeline.}
+\caption{Target query, option~A -- the LINQ expression of \cref{lst:ex-source-query} as a MongoDB aggregation pipeline over referenced documents.}
 \label{lst:ex-target-query}
+\end{listing}
+
+\paragraph{Option B: MongoDB with embedded documents.}
+Alternatively, the orders can be \emph{embedded} as a nested array inside each customer document (\cref{lst:ex-target-schema-embed}). The field is a plain \texttt{List<Order>} with no \texttt{@DocumentReference}, so no second collection and no join exist. The query (\cref{lst:ex-target-query-embed}) is correspondingly simpler: a single \texttt{find} with an \texttt{\$elemMatch} criterion\footnote{MongoDB \texttt{\$elemMatch} query operator: \url{https://www.mongodb.com/docs/manual/reference/operator/query/elemMatch/}; exposed in Spring Data as \texttt{Criteria.elemMatch}.} that asks whether the embedded \texttt{orders} array contains an element past the cut-off -- the direct counterpart of the LINQ \texttt{.Any}.
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, frame=single]{java}
+@Document("customers")
+class Customer {
+    @Id String id;
+    @Field("customerName") String customerName;
+    List<Order> orders;   // embedded sub-documents (intra-document, denormalized)
+}
+\end{minted}
+\caption{Target schema, option~B -- Spring Data MongoDB with the orders \emph{embedded} as a nested array (intra-document).}
+\label{lst:ex-target-schema-embed}
+\end{listing}
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, frame=single]{java}
+// Embedded variant: no $lookup -- match the nested orders array directly.
+Query query = Query.query(
+    Criteria.where("orders").elemMatch(Criteria.where("date").gt(cutoff)));
+return mongoTemplate.find(query, Customer.class);
+\end{minted}
+\caption{Target query, option~B -- the same LINQ expression as a single \texttt{find} with an \texttt{\$elemMatch} over the embedded array.}
+\label{lst:ex-target-query-embed}
+\end{listing}
+
+\paragraph{Option C: Neo4j as a graph.}
+In Spring Data Neo4j the entities become \emph{nodes} and the association becomes a typed \emph{relationship}. \Cref{lst:ex-target-schema-neo} maps \texttt{Customer} with \texttt{@Node} and connects it to its orders with \texttt{@Relationship(type = "PLACED")}.\footnote{Spring Data Neo4j relationship mapping: \url{https://docs.spring.io/spring-data/neo4j/reference/object-mapping/metadata-based-mapping.html}.} The query (\cref{lst:ex-target-query-neo}) is a graph \emph{traversal}: a Cypher-DSL\footnote{The Neo4j Cypher-DSL builds Cypher statements type-safely: \url{https://neo4j.github.io/cypher-dsl/}.} statement matches the \texttt{(:Customer)-[:PLACED]->(:Order)} path, filters on the order date, and returns the distinct customers.
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, frame=single]{java}
+@Node("Customer")
+class Customer {
+    @Id Long id;
+    @Property("customerName") String customerName;
+    @Relationship(type = "PLACED", direction = Relationship.Direction.OUTGOING)
+    List<Order> orders;
+}
+\end{minted}
+\caption{Target schema, option~C -- Spring Data Neo4j with the orders reached over a \texttt{PLACED} relationship.}
+\label{lst:ex-target-schema-neo}
+\end{listing}
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, frame=single]{java}
+// Graph variant: traverse the PLACED relationship and filter on the order date.
+var c = Cypher.node("Customer").named("c");
+var o = Cypher.node("Order").named("o");
+Statement statement = Cypher.match(c.relationshipTo(o, "PLACED"))
+    .where(o.property("date").gt(Cypher.parameter("cutoff")))
+    .returningDistinct(c)
+    .build();
+return neo4jTemplate.findAll(statement, Customer.class);
+\end{minted}
+\caption{Target query, option~C -- the same LINQ expression as a Cypher-DSL relationship traversal in Spring Data Neo4j.}
+\label{lst:ex-target-query-neo}
 \end{listing}
 
 \subsection{Why even this is non-trivial}
 
-\Cref{fig:paradigm-mapping} makes the data-model mismatch concrete: the same \texttt{Customers}/\texttt{Orders} foreign-key association has no one-to-one image in either target paradigm. This example exhibits, in miniature, every difficulty the assistant must handle. The data models do not align one-to-one: a foreign-keyed table is neither a document nor a graph, so the translator must \emph{decide} how to represent the association.
+\Cref{fig:paradigm-mapping} makes the data-model mismatch concrete: the same \texttt{Customers}/\texttt{Orders} foreign-key association has no one-to-one image in either target paradigm. This example exhibits, in miniature, every difficulty the assistant must handle. The data models do not align one-to-one: a foreign-keyed table is neither a document nor a graph, so the translator must \emph{decide} how to represent the association. \Cref{fig:paradigm-mapping-classes} shows the same pattern, but using the ORM/ODM/OGM framework abstraction.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{img/uom_paradigm_mapping.pdf}
 \caption{The same relational association translated into the two target models. The document model must choose between embedding and referencing the orders; the graph model turns the entities into nodes joined by a typed relationship.}
 \label{fig:paradigm-mapping}
-\end{figure} 
+\end{figure}
 
-Types must be remapped (the integer key becomes a string document identifier). The query must be rewritten into a different idiom (a relational navigation becomes a document aggregation) while returning logically the same result set -- code that merely compiles is not enough. A realistic application multiplies this by dozens of entities and hundreds of queries, each carrying a small decision that can silently break correctness. This is precisely the slow, manual, risky work the assistant is meant to automate \emph{and} verify.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{img/uom_paradigm_mapping_classes.pdf}
+\caption{The same relational association as \cref{fig:paradigm-mapping} translated into the two target models, but using the ORM/ODM/OGM framework abstraction.}
+\label{fig:paradigm-mapping-classes}
+\end{figure}
+
+Types must be remapped (the integer key becomes a string document identifier in MongoDB or a generated node identifier in Neo4j). The query must be rewritten into a different idiom -- the same relational navigation becomes a document aggregation, an embedded-array \texttt{\$elemMatch}, or a graph traversal depending on the chosen model -- while returning logically the same result set, so code that merely compiles is not enough. A realistic application multiplies this by dozens of entities and hundreds of queries, each carrying a small decision that can silently break correctness. This is precisely the slow, manual, risky work the assistant is meant to automate \emph{and} verify.
 
 \section{Requirements}
 \label{sec:problem-requirements}

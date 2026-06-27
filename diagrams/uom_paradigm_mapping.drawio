@@ -1,16 +1,16 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram id="4zbYV3DT2hE-RpNETes1" name="Page-1">
-    <mxGraphModel dx="1028" dy="707" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="640" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="640" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="qem8xiL9-qcaIlcroFmn-6" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Relational&lt;/font&gt;&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" vertex="1" parent="1">
+        <mxCell id="qem8xiL9-qcaIlcroFmn-6" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Relational (MS SQL Server)&lt;/font&gt;&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" parent="1" vertex="1">
           <mxGeometry x="30" y="50" width="260" height="340" as="geometry" />
         </mxCell>
-        <mxCell id="qem8xiL9-qcaIlcroFmn-5" value="&lt;p&gt;&lt;b&gt;Graph&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" vertex="1" parent="1">
+        <mxCell id="qem8xiL9-qcaIlcroFmn-5" value="&lt;p&gt;&lt;b&gt;Document (MongoDB)&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" parent="1" vertex="1">
           <mxGeometry x="470" y="50" width="240" height="340" as="geometry" />
         </mxCell>
-        <mxCell id="qem8xiL9-qcaIlcroFmn-4" value="&lt;p&gt;&lt;b&gt;Graph&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" vertex="1" parent="1">
+        <mxCell id="qem8xiL9-qcaIlcroFmn-4" value="&lt;p&gt;&lt;b&gt;Graph (Neo4j)&lt;/b&gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;glass=0;dashed=1;dashPattern=8 8;align=center;verticalAlign=top;spacing=2;spacingRight=0;spacingBottom=0;spacingTop=-7;" parent="1" vertex="1">
           <mxGeometry x="150" y="430" width="460" height="120" as="geometry" />
         </mxCell>
         <mxCell id="relTitle" value="Relational — EFCore, NHibernate, Dapper (source)" style="text;html=1;align=center;fontStyle=1;fillColor=none" parent="1" vertex="1">
@@ -28,7 +28,7 @@
         <mxCell id="docTitle" value="Document — Spring Data MongoDB (target ODM)" style="text;html=1;align=center;fontStyle=1;fillColor=none" parent="1" vertex="1">
           <mxGeometry x="430" y="20" width="320" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="docCust" value="&lt;b&gt;customers  (collection)&lt;/b&gt;&lt;br&gt;_id : ObjectId&lt;br&gt;customerName : string&lt;br&gt;@DocumentReference orders : [ ref ]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+        <mxCell id="docCust" value="&lt;b&gt;customers  (collection)&lt;/b&gt;&lt;br&gt;_id : ObjectId&lt;br&gt;customerName : string&lt;div&gt;&lt;br&gt;&lt;i&gt;orders : [ ref ]&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
           <mxGeometry x="480" y="90" width="220" height="110" as="geometry" />
         </mxCell>
         <mxCell id="docOrd" value="&lt;b&gt;orders  (collection)&lt;/b&gt;&lt;br&gt;_id : ObjectId&lt;br&gt;date : date" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
@@ -40,11 +40,11 @@
         <mxCell id="grTitle" value="Graph — Spring Data Neo4j (target OGM)" style="text;html=1;align=center;fontStyle=1;fillColor=none" parent="1" vertex="1">
           <mxGeometry x="385" y="400" width="260" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="nCust" value="&lt;b&gt;:Customer&lt;/b&gt;&lt;br&gt;customerName" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
-          <mxGeometry x="170" y="454" width="150" height="80" as="geometry" />
+        <mxCell id="nCust" value="&lt;b&gt;:Customer&lt;/b&gt;&lt;br&gt;&lt;i&gt;id : UUID&lt;/i&gt;&lt;br&gt;&lt;div&gt;customerName : string&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
+          <mxGeometry x="170" y="454" width="150" height="86" as="geometry" />
         </mxCell>
-        <mxCell id="nOrd" value="&lt;b&gt;:Order&lt;/b&gt;&lt;br&gt;date" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
-          <mxGeometry x="440" y="454" width="150" height="80" as="geometry" />
+        <mxCell id="nOrd" value="&lt;b&gt;:Order&lt;/b&gt;&lt;br&gt;&lt;i&gt;id: UUID&lt;/i&gt;&lt;br&gt;&lt;div&gt;date : date&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" parent="1" vertex="1">
+          <mxGeometry x="440" y="454" width="150" height="86" as="geometry" />
         </mxCell>
         <mxCell id="rel" value=":PLACED" style="endArrow=block;html=1;strokeColor=#d79b00;fontStyle=2" parent="1" source="nCust" target="nOrd" edge="1">
           <mxGeometry relative="1" as="geometry" />
