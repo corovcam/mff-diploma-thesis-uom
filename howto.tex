@@ -1,7 +1,7 @@
 \chapter{Prompt Context Snippets}
 \label{chap:appendix-context-snippets}
 
-This chapter contains the context snippets that were used to prompt the language model for generating the code translations. The snippets are organized by the type of context they provide, such as sandbox configuration files, build tool configurations, schema definitions, query examples, and other relevant code fragments.
+This chapter contains the context snippets that were used to prompt the language model for generating the code translations. The snippets are organized by the type of context they provide, such as sandbox configuration files (i.e. build tool configurations) in \cref{sec:appendix-sandbox-config}, schema definitions, query examples, and other relevant code fragments.
 
 \section{Sandbox Configuration Files}
 \label{sec:appendix-sandbox-config}
@@ -22,4 +22,16 @@ This chapter contains the context snippets that were used to prompt the language
 \inputminted[fontsize=\footnotesize, linenos, breaklines, frame=single]{xml}{code/dapper-sandbox.csproj}
 \caption{Dapper \texttt{.csproj} file for the .NET sandbox project.}
 \label{lst:dapper-sandbox-csproj}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[fontsize=\footnotesize, linenos, breaklines, frame=single]{xml}{code/mongo-pom.xml}
+\caption{MongoDB \texttt{pom.xml} file for the Java sandbox project.}
+\label{lst:mongo-pom-xml}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[fontsize=\footnotesize, linenos, breaklines, frame=single]{xml}{code/neo4j-pom.xml}
+\caption{Neo4j \texttt{pom.xml} file for the Java sandbox project.}
+\label{lst:neo4j-pom-xml}
 \end{listing}
