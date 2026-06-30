@@ -1,0 +1,1 @@
+docker run -v ${PWD}/.output:/thesis ghcr.io/mff-cuni-cz/cuni-thesis-validator verify /thesis/thesis.pdf

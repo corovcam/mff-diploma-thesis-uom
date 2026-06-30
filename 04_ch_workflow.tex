@@ -6,6 +6,15 @@
 
 % a picture of the workflow graph; the auto-generated mermaid diagram; nodes and conditional edges 
 
+\newgeometry{left=3cm, right=3cm, top=3cm}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth, height=0.9\textheight, keepaspectratio]{img/uom_state_machine.pdf}
+\caption[Translation State Machine Diagram (Schema and Queries)]{State machine diagram representing the schema and query translation workflow}
+\label{fig:uom-state-machine}
+\end{figure}
+\restoregeometry
+
 \section{A trace of a running example}
 \label{sec:workflow-trace}
 
@@ -20,29 +29,31 @@
 \label{sec:workflow-extract}
 
 
-\subsection{2. Inspect schemas}
+\subsection{2. Schema Inspection}
 \label{sec:workflow-inspect}
 
 
-\subsection{3. Generate translation}
+\subsection{3. Generate Translation}
 \label{sec:workflow-generate}
 
 
-\subsection{4. Compile and execute}
+\subsection{4. Compile and Execute}
 \label{sec:workflow-validate}
 
 
-\subsection{5. Check equivalence}
+\subsection{5. Check Equivalence}
 \label{sec:workflow-equivalence}
 
 
-\subsection{6. Evaluate (the LLM judge)}
+\subsection{6. Evaluation (LLM-as-a-judge)}
 \label{sec:workflow-judge}
 
-
-\subsection{7. Human intervention}
+\subsection{7. Human Intervention}
 \label{sec:workflow-human}
 
+
+\subsection{8. Finalize Translation}
+\label{sec:workflow-finalize}
 
 \section{The Bounded Self-Repair Loop}
 \label{sec:workflow-loop}

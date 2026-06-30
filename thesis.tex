@@ -86,7 +86,7 @@
 % hyperref to be included as the last package (except for cleveref and some other packages)
 \usepackage{hyperref} % for clickable links
 \usepackage{nameref} % for named references
-\usepackage[acronym, toc, automake]{glossaries} % for glossaries
+\usepackage[acronym, toc, automake, nomain]{glossaries} % for glossaries
 \usepackage[para,online,flushleft]{threeparttable} % for table notes
 
 % Bibliography formatting.
@@ -149,6 +149,7 @@
 \hypersetup{breaklinks=true}
 
 \usepackage[noabbrev]{cleveref}
+% \usepackage{layout} % for debugging the layout
 
 %%% Some customizations 
 % \usemintedstyle{vs} % for Visual Studio Code style
@@ -165,6 +166,8 @@
 
 
 \begin{document}
+
+% \layout
 
 \include{title}
 
