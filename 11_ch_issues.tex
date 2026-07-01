@@ -13,8 +13,9 @@
 % comparison with SOTA, Claude
 % structured output cannot be used with chosen provider; had to shift to tool calling
 % long outputs are truncated by the provider; model is unable to generate long outputs EVEN though it should be able to based on paper - long context window
-% kimi-k2.6 vs kimi-k2.7-code - not really upgrade for coding
+% kimi-k2.6 vs kimi-k2.7-code - not really upgrade for coding, but faster
 % qwen3.5 122B non-thinking better than kimi-k2.6 1T parameter model for code generation;
-% why for graph-based approaches its better to use simpler model vs. ReAct agent
+% why for graph-based approaches its better to use simpler model vs. ReAct agent - decision to switch generate_translation_node to ReAct agent with tool calling (save_validation_harnesses)
+% how we combatted AI provider not returning valid structured output (JSON) for newer long-horizon tool-calling optimized models (kimi-k2.7-code), which don't output valid JSON for long output per one request (not disclosed by the provider, nor in the model card by MoonShotAI/hugging-face) - mitigation: for experiments, we had to lower the amount of generated tokens per request, by splitting the output into multiple requests (tools) and instruct AI to specifically call them sequentially, not in parallel (real problem with the newer models, optimized for agentic+coding use-cases); we tried various models to test this hypothesis: qwen3.5 works fast, but cannot generalize to unseen queries (not in system prompt examples), kimi-k2.7-code is better at generalization, but the knowledge cutoff is not officially disclossed and hallucinates APIs/imports (https://metehan.ai/articles/llm-knowledge-cutoff-dates/); we had to create specialized Agent Skills that contained EXACT APIs/imports that the model can use; GLM-5.2 is the best in the series, but the provider's latency (~40min per request) made experiments unfeasible, considering that the request got cut-off by the provider mid-run and we had to restart it to get some result; deepseek-v4-pro seems good enough as kimi-k2.7-code with the best reasoning capabilities, compared to GLM-5.2
 % why we switched to ReAct agent in generate_translation_node from simple model call (prompt + structured output)
 

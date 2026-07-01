@@ -1,0 +1,124 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+  <diagram id="trace" name="Run Trace">
+    <mxGraphModel dx="1042" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="418" pageHeight="591" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="START" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="184" y="12" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m0" value="&lt;b&gt;[0] USER&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;request&lt;/font&gt;&lt;br&gt;&lt;b&gt;Translate EFCore 10 → Spring Data MongoDB 5.0&lt;/b&gt;&lt;br&gt;[Table(&amp;quot;Customers&amp;quot;,Schema=&amp;quot;Sales&amp;quot;)] class Customer { [Key] int CustomerID; [MaxLength(200)] string CustomerName; DateTime AccountOpenedDate; decimal? CreditLimit; List&amp;lt;CustomerTransaction&amp;gt; … }&lt;br&gt;… + CustomerTransaction, Order, OrderLine, SandboxDbContext …&lt;br&gt;&lt;i&gt;Q1&lt;/i&gt; PickingCompletedWhen∈[2014-12-20..31] · &lt;i&gt;Q2&lt;/i&gt; OrderID==26866 · &lt;i&gt;Q3&lt;/i&gt; UnitPrice==25m · &lt;i&gt;Q4&lt;/i&gt; OrderID∈{1,10,…,10000} · &lt;i&gt;Q5&lt;/i&gt; Description.Contains(&amp;quot;C++&amp;quot;)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="64" width="338" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="&lt;b&gt;[1] USER&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;extractor prompt&lt;/font&gt;&lt;br&gt;&lt;b&gt;Analyze conversation &amp;amp; extract inputs&lt;/b&gt;&lt;br&gt;Extract source schema/query code, origin &amp;amp; destination framework (+versions); decide translation type = schema | query | both.&lt;br&gt;Already extracted: {all null} … Conversation: «Translate EFCore 10 → …» &lt;i&gt;(truncated)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="205" width="338" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="&lt;b&gt;[2] AI&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;① Extract Input — result&lt;/font&gt;&lt;br&gt;&lt;b&gt;Successfully extracted inputs&lt;/b&gt;&lt;br&gt;{ source_schema_code: «[Table(…)] class Customer…», source_query_code: «Query1…Query5», &lt;b&gt;translation_type: &amp;quot;both&amp;quot;&lt;/b&gt;, source_target: &amp;quot;.NET EF Core&amp;quot; v10, destination_target: &amp;quot;Java Spring Data MongoDB&amp;quot; v5.0 }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="313" width="338" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="&lt;b&gt;[3] USER&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;② schema-inspection prompt&lt;/font&gt;&lt;br&gt;&lt;b&gt;Inspect DB schemas for EFCore 10 → Spring Data MongoDB 5.0&lt;/b&gt;&lt;br&gt;Injects mapping SQL Server → MongoDB:&lt;br&gt;&amp;lt;database_mapping&amp;gt; {databases:{source:&#39;Microsoft SQL Server&#39;, destination:&#39;MongoDB&#39;}, collections:{orderLines:{EMBEDDED_DOCUMENT, propertyMappings…}, orders:{…}}} … &lt;i&gt;(~44 KB)&lt;/i&gt; … + &amp;lt;schema_code&amp;gt;/&amp;lt;query_code&amp;gt; echoed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="428" width="338" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" value="&lt;b&gt;[4-8] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;SQL Server sampling&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Inspect both source SQL Server tables and target MongoDB collections.”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;execute_sql ×4&lt;/b&gt; — SELECT TOP 3 * FROM Sales.OrderLines / Orders / Customers / CustomerTransactions&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ [{OrderLineID:1,OrderID:45,…}] · [{OrderID:1,CustomerID:832,…}] · &lt;b&gt;null&lt;/b&gt; · [{CustomerTransactionID:2,…}]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="562" width="338" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="t9" value="&lt;b&gt;[9-12] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;locate Customers / list DBs&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Customers returned null — query differently &amp;amp; inspect MongoDB.”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;execute_sql ×2&lt;/b&gt; (INFORMATION_SCHEMA.TABLES ; [Sales].[Customers]) · &lt;b&gt;list-databases&lt;/b&gt;&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ [{Sales,Customers},{Website,Customers},{Sales,OrderLines},…] · &lt;b&gt;null&lt;/b&gt; · “Found 1 databases” &lt;font color=&#39;#b85450&#39;&gt;⚠ untrusted-data wrapper&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="700" width="338" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="t13" value="&lt;b&gt;[13-16] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;columns / list collections&lt;/font&gt;&lt;br&gt;🔧 &lt;b&gt;execute_sql ×2&lt;/b&gt; (COUNT Sales.Customers ; Customers columns) · &lt;b&gt;list-collections&lt;/b&gt;(uom)&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ {cnt:0} · [{CustomerID,int,NO},{CustomerName,nvarchar,NO},…] · “Found 4 collections for uom”" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="841" width="338" height="103" as="geometry" />
+        </mxCell>
+        <mxCell id="t17" value="&lt;b&gt;[17-19] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;MongoDB target schema&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Inspect MongoDB target collections orderLines, orders.”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;collection-schema ×2&lt;/b&gt; (orderLines, orders)&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ “Found 14 fields in uom.orderLines” · “Found 18 fields in uom.orders” &lt;i&gt;(inferred)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="960" width="338" height="103" as="geometry" />
+        </mxCell>
+        <mxCell id="t20" value="&lt;b&gt;[20-22] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;sample documents&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Sample documents matching the query patterns.”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;find ×2&lt;/b&gt; (orderLines limit 3 ; orders limit 3)&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ “231412 documents, returning 3” · “73595 documents, returning 3”" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1079" width="338" height="101" as="geometry" />
+        </mxCell>
+        <mxCell id="t23" value="&lt;b&gt;[23-26] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;SQL Server column types&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Get SQL Server column info &amp;amp; verify data types.”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;execute_sql ×3&lt;/b&gt; (OrderLines / Orders / CustomerTransactions columns)&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ [{OrderLineID,int},…,{UnitPrice,decimal}] · [{OrderID,int},…,{OrderDate}] · [{CustomerTransactionID,int},…,{TransactionDate,date}]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1196" width="338" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="m27" value="&lt;b&gt;[27] AI&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;schema summary&lt;/font&gt;&lt;br&gt;&lt;b&gt;Schema inspection completed&lt;/b&gt;&lt;br&gt;SOURCE — MSSQL WideWorldImporters: Sales.OrderLines (231,412 rows; PK OrderLineID, FK OrderID→Orders, UnitPrice decimal(18,2)…), Sales.Orders, Sales.CustomerTransactions.&lt;br&gt;TARGET — MongoDB uom: orderLines, orders collections with mapped fields …" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1330" width="338" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="m28" value="&lt;b&gt;[28] AI&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;③ Generate Translation&lt;/font&gt;&lt;br&gt;&lt;b&gt;Translation generated successfully&lt;/b&gt;&lt;br&gt;Assembled runnable validation harnesses (model bodies + canonical prelude).&lt;br&gt;{ source_entry: &amp;quot;EFCoreQueryEntrypoint&amp;quot;, target_entry: &amp;quot;MongoQueryEntrypoint&amp;quot;, source_body: 6251 chars, target_body: 12816 chars }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1454" width="338" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="t29" value="&lt;b&gt;[29-31] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;④ Compile &amp;amp; Execute&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Commencing parallel validation of source and target queries…”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;validate_dotnet_code&lt;/b&gt; (.NET EF Core) &amp;nbsp;∥&amp;nbsp; &lt;b&gt;validate_java_code&lt;/b&gt; (Java Spring Data MongoDB)&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ &lt;b&gt;[Dotnet Passed]&lt;/b&gt; Build succeeded, 0 Errors, net10.0 · &lt;b&gt;[Java Passed]&lt;/b&gt; MongoClient driver 5.6.3, Java 25, executed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1569" width="338" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="t32" value="&lt;b&gt;[32-33] AI + TOOL&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;⑤ Check Equivalence&lt;/font&gt;&lt;br&gt;&lt;i&gt;“Commencing query equivalence check between source and target…”&lt;/i&gt;&lt;br&gt;🔧 &lt;b&gt;check_query_equivalence&lt;/b&gt; (source vs target output; DeepDiff)&lt;br&gt;&lt;font color=&#39;#82b366&#39;&gt;── results ──&lt;/font&gt;&lt;br&gt;→ { query1: &lt;b&gt;Equivalent&lt;/b&gt;, query2, query3, query4, query5: all &lt;b&gt;Equivalent&lt;/b&gt; }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eef3fb;strokeColor=#3b6ea5;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1703" width="338" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="m34" value="&lt;b&gt;[34] USER&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;⑥ Evaluation (LLM-as-judge) prompt&lt;/font&gt;&lt;br&gt;&lt;b&gt;Evaluate validation results — ACCEPTABLE or REJECT &amp;amp; retry?&lt;/b&gt;&lt;br&gt;Based on validation output + DeepDiff equivalence.&lt;br&gt;&amp;lt;validation_results&amp;gt; [Dotnet Passed]… [Java Passed]… all queries Equivalent … &lt;i&gt;(truncated)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1825" width="338" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="m35" value="&lt;b&gt;[35] AI&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;verdict&lt;/font&gt;&lt;br&gt;&lt;b&gt;ACCEPT — accepted by automated evaluation.&lt;/b&gt;&lt;br&gt;Both EF Core &amp;amp; Spring Data MongoDB projects compiled and executed; all 5 test queries Equivalent; no semantic/runtime errors → logically equivalent &amp;amp; syntactically valid. Finalizing…" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1933" width="338" height="96" as="geometry" />
+        </mxCell>
+        <mxCell id="m36" value="&lt;b&gt;[36] AI&lt;/b&gt; &amp;nbsp;&lt;font color=&#39;#555&#39;&gt;⑧ Finalize Translation&lt;/font&gt;&lt;br&gt;&lt;b&gt;Translation finalized — final code&lt;/b&gt;&lt;br&gt;Translated schema (Java): @Document(collection=&amp;quot;orders&amp;quot;) class Order { @Id String id; @Field(&amp;quot;orderId&amp;quot;) Integer orderId; @DocumentReference(lazy=true, lookup=…) … } + translated queries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d0f0d0;strokeColor=#2d7d2d;fontSize=9;align=left;verticalAlign=top;spacing=6;arcSize=5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="2045" width="338" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="end" value="END" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="184" y="2160" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;● purple = USER / prompt turn &amp;nbsp; ● blue = AI (LLM) message&lt;br&gt;● blue-grey = AI tool call + tool result &amp;nbsp; ● red = LLM-as-judge&lt;br&gt;● green = finalized output &amp;nbsp; 🔧 = tool_calls (names only)&lt;br&gt;── results ── = truncated tool output &amp;nbsp; → = message order" style="text;html=1;align=left;verticalAlign=top;fillColor=#fbfbfb;strokeColor=#cccccc;rounded=1;spacing=8;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="40" y="2220" width="338" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="start" target="m0" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m0" target="m1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m1" target="m2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m2" target="m3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m3" target="t4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t4" target="t9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t9" target="t13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t13" target="t17" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t17" target="t20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t20" target="t23" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t23" target="m27" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m27" target="m28" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m28" target="t29" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t29" target="t32" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="t32" target="m34" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m34" target="m35" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m35" target="m36" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;noEdgeStyle=1;orthogonal=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;" parent="1" source="m36" target="end" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
