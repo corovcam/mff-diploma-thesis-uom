@@ -1,0 +1,311 @@
+\chapter{Supplementary Material from the Implementation}
+\label{app:implementation}
+
+This appendix collects the concrete, verbatim artifacts referenced from the main
+text. They are reproduced from the Universal Object Mapping
+repository~\cite{corovcakUOMRepository2026} and are intended as a reference for the
+reader who wishes to inspect the exact inputs, schemas, and outputs behind the
+workflow described in \cref{chap:workflow}.
+
+\section{Structured-Output and Tool Schemas}
+\label{app:pydantic-schemas}
+
+The typed interfaces through which model output re-enters the graph state
+(\cref{sec:prompting-structured}) are defined as Pydantic models; the listings below
+reproduce their fields with abbreviated descriptions.
+
+\Cref{lst:app-extraction} shows the extraction schema. The code fields accept a
+list of strings (one per line) so that the original indentation survives the
+provider's JSON transport, and are joined back into a single string by a
+post-validation hook; the \texttt{error} field lets the model report an unfulfillable
+request as data (\cref{sec:workflow-extract}).
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, fontsize=\small, frame=single]{python}
+class ExtractionOutput(BaseModel):
+    source_schema_code: list[str] | str | None   # source schema, line by line
+    source_query_code:  list[str] | str | None   # source queries, line by line
+    translation_type:   TranslationType          # SCHEMA | QUERY | BOTH
+    source_target:      FrameworkEnum            # identified origin framework
+    source_target_version:      str | None
+    destination_target: FrameworkEnum            # identified target framework
+    destination_target_version: str | None
+    error: str | None = None   # set when the request cannot be fulfilled
+
+    @model_validator(mode="after")
+    def join_lists(self): ...   # joins list-form code fields into strings
+\end{minted}
+\caption{The extraction schema (abridged from \texttt{react\_agent/graph.py}).}
+\label{lst:app-extraction}
+\end{listing}
+
+\Cref{lst:app-save-tool} shows the argument schema of the single state-writing
+\texttt{save\_translation} tool that replaced monolithic structured output for the
+generation stage (\cref{sec:prompting-structured}). The two body fields carry only the
+region below the harness seam; the entry-point class names are baked into the argument
+descriptions and are no longer the model's responsibility.
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, fontsize=\small, frame=single]{python}
+def build_save_translation_tool(translation_type, source_entry, target_entry):
+    # args schema (both fields required, descriptions abridged):
+    #   source_validation_body: str
+    #     "SOURCE-side harness BODY: entity classes, query classes, and the
+    #      entrypoint class named exactly `{source_entry}`. No imports, no
+    #      redeclaration of injected serializer/runtime/factory classes."
+    #   target_validation_body: str
+    #     "TARGET-side harness BODY ... entrypoint named exactly `{target_entry}`."
+    # The tool persists the fields to state via Command(update=...) and is to be
+    # called EXACTLY ONCE at the end of the agent's run.
+\end{minted}
+\caption{The \texttt{save\_translation} tool contract (abridged from \texttt{react\_agent/translation\_draft.py}).}
+\label{lst:app-save-tool}
+\end{listing}
+
+\Cref{lst:app-verdicts} shows the two verdict schemas: the judge's structured output
+(\cref{sec:validation-judge}) and the resume payload of the human-intervention
+interrupt (\cref{sec:workflow-human}), which deliberately mirror each other so that a
+human decision re-enters the loop through the same shape as an automated one.
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, fontsize=\small, frame=single]{python}
+class EvaluationOutput(BaseModel):
+    decision: Literal["ACCEPT", "REJECT"]
+    explanation: str          # mandatory; becomes the repair feedback
+
+class HumanInterventionResponse(BaseModel):
+    decision: Literal["accept", "reject"]
+    feedback: str             # targeted correction pointers on reject
+\end{minted}
+\caption{The judge and human-intervention verdict schemas.}
+\label{lst:app-verdicts}
+\end{listing}
+
+\section{Per-Node System Prompts}
+\label{app:system-prompts}
+
+The prompts below are reproduced from \texttt{react\_agent/prompts.py}
+(\cref{chap:prompting}). Placeholders in braces are interpolated at run time.
+
+\subsection*{Input extraction}
+
+\begin{longlisting}
+\begin{minted}[breaklines, fontsize=\small, frame=single]{text}
+You are an information extractor. Your goal is to extract source schema code, source query code, origin framework/version, destination framework/version, and translation type from the user's messages.
+
+Allowed origin frameworks: {origin_frameworks}
+Allowed destination frameworks: {destination_frameworks}
+
+Extraction rules:
+1. You must identify the origin framework and the destination framework from the user's messages.
+2. You must identify IF the code is a schema (entities/models+context/sessions/configs, etc.) or a query for the given origin framework, or both.
+3. If some data has already been extracted, you must use it as is and only extract the missing data.
+4. Output specific structured outputs exactly as requested. Do not provide markdown wrapping if native tools capture the output natively.
+5. Keep source_schema_code and source_query_code as raw code snippets when available.
+6. Preserve the original formatting (including indentation and line breaks) of the extracted code snippets.
+\end{minted}
+\caption{System prompt of the input-extraction stage.}
+\label{lst:app-prompt-extraction}
+\end{longlisting}
+
+\subsection*{Schema inspection}
+
+\begin{longlisting}
+\begin{minted}[breaklines, fontsize=\small, frame=single]{text}
+You are a database schema inspector. Your goal is to examine source and target database schemas to provide context for code translation.
+
+You have access to database tools that can:
+- List collections/tables/node labels/relationship types in databases
+- Inspect schema structures (columns, fields, nodes, relationships/edges)
+- Sample documents/rows/nodes/edges to understand data shapes
+
+Your task:
+1. Inspect the SOURCE database schema relevant to the code being translated.
+   - For MS SQL: use the prebuilt mssql tools to list tables, describe columns, and sample rows.
+   - For MongoDB: use mongodb tools to list collections, inspect document schemas, and sample documents.
+   - For Neo4j: use the prebuilt neo4j tools to list node labels, relationship types, and sample nodes/edges.
+2. Inspect the TARGET database schema if applicable (e.g., if translating from SQL to MongoDB, inspect what MongoDB collections exist).
+3. Focus on ONLY the entities/models/relationships and their relationships relevant to the code being translated.
+4. Return a concise but complete summary of the relevant source and target schemas. Do not include a preamble or postamble. The summary will become part of the system prompt for another LLM agent that will perform the actual code translation.
+
+System time: {system_time}
+\end{minted}
+\caption{System prompt of the schema-inspection stage.}
+\label{lst:app-prompt-inspector}
+\end{longlisting}
+
+\subsection*{Translation generation}
+
+The generation prompt is assembled dynamically per framework pair
+(\cref{sec:prompting-grounding}); the invariant contract is reproduced below, with the
+interpolated blocks -- the pinned manifests, the worked mapping examples, and the
+harness body-structure references -- elided for space.
+
+\begin{longlisting}
+\begin{minted}[breaklines, fontsize=\small, frame=single]{text}
+You are a Universal Object Mapping architect. Your goal is to aid in translating database schema structures and query logic between diverse languages and frameworks.
+
+Source Framework: {source_target}
+Destination Framework: {destination_target}
+
+Core translation contract:
+1. Identify whether the user input contains schema code, query code, or both.
+2. Translate only what is requested by translation type.
+3. Preserve behavior, field intent, and query semantics.
+4. Keep translated query methods semantically equivalent to the source query method. Do not introduce synthetic validator parameters (for example sortByField/ascending) unless they already exist in source query code.
+5. Keep schema code and query code separated.
+6. CRITICAL - translate ONLY what the user provided. Translate exclusively the entities and fields present in the user's <source_schema_code> and the queries in <source_query_code>. NEVER introduce an entity, field, or query that is not in the user's input. The examples below demonstrate STRUCTURE ONLY [...]
+7. You finish by calling the single `save_translation` tool EXACTLY ONCE with every required field filled. There is no separate JSON output. [...]
+8. The `*_validation_body` fields are the RUNNABLE harness body ONLY: start directly at the schema/entity declarations, then the query classes, then the entrypoint class with `main`/`Main` that validates each entity and runs each query. The fixed boilerplate - `import`/`using`/`package`/`namespace` lines, the JSON serializer, the runtime-support and DB template-factory classes - is INJECTED FOR YOU around your body. Do NOT write those lines and do NOT redeclare those classes.
+   - source_validation_body MUST declare the source entrypoint class named exactly `{source_entry}`.
+   - target_validation_body MUST declare the target entrypoint class named exactly `{target_entry}`.
+9. All code must be properly indented with real line breaks. DO NOT wrap field values in XML tags or markdown code fences. DO NOT use comments or placeholders in code - it WILL be executed. Never save null or empty values.
+
+Framework rules:
+1. For Java schema classes, avoid public access modifier unless explicitly required.
+2. For Spring Data MongoDB queries, use MongoTemplate with Query/Criteria API.
+3. For Spring Data Neo4j queries, use Neo4jTemplate and Cypher-DSL (Statement-based), not raw string concatenation.
+4. Keep translated query method shape close to source query method shape. [...]
+
+Additional rules:
+1. You do NOT run validators or compile code. After you call `save_translation`, the translated code is assembled with the canonical prelude and validated automatically by a downstream pipeline (compile + run on both sides, then equivalence). If it fails, you will be re-invoked with concrete feedback to fix and re-save. [...]
+2. You have research tools - use them to get the exact API right before saving:
+   - Use `search_spring_docs` to query the Spring documentation [...]
+   - Use `microsoft_docs_search`, `microsoft_code_sample_search`, and `microsoft_docs_fetch` for Microsoft documentation and code samples.
+   - Use `search` to query the web [...]
+
+--- Validation setup configuration ---
+[pinned .csproj of the source framework and pom.xml of the target framework]
+
+--- TARGET-LANGUAGE MAPPING REFERENCE ---
+[worked input/output mapping examples for the framework pair, structure only]
+
+--- VALIDATION BODY STRUCTURE REFERENCE ---
+[the region of each canonical harness snippet below the seam marker]
+\end{minted}
+\caption{Partial system prompt of the translation-generation stage.}
+\label{lst:app-prompt-generation}
+\end{longlisting}
+
+\subsection*{Finalization}
+
+\begin{longlisting}
+\begin{minted}[breaklines, fontsize=\small, frame=single]{text}
+You are a Universal Object Mapping finalizer.
+
+A translation has just been VALIDATED end-to-end: the harness you are given compiled, executed against the database, and passed semantic equivalence against the source. The translation is already CORRECT. Your job is NOT to translate. Your job is to EXTRACT the clean, production-ready target code from the validated harness, removing only the validation scaffolding.
+
+Hard rules:
+1. SOURCE OF TRUTH is the validated harness. Copy the entity definitions and the query logic VERBATIM from it. Do NOT re-translate, rename, reorder fields, or change any query predicate, filter, projection, sort, or aggregation - those exact semantics are what equivalence verified.
+2. REMOVE only validation-only scaffolding:
+   - the JSON serializer class, the runtime-support class, the template/context/db factory class, logging setup, and their imports.
+   - the entrypoint class's main/Main method, validate*/ValidateEntity methods, and all results-collection / JSON-writing / env-path code.
+   - per-query validation helpers (harness()/RunQuery, count/firstSample/lastSample, and deterministic ORDER BY / Sort / limit / skip that exist ONLY to make validation deterministic and were not in the user's original query).
+   - JSON-serialization annotations that are not part of the object mapping (e.g. [JsonPropertyName], @JsonIgnoreProperties, @ReadOnlyProperty added for validation). KEEP genuine ORM mapping annotations: @Document, @Field, @Id, @Node, @Property, @DocumentReference, [Table], [Key], [ForeignKey], [Column], etc.
+3. KEEP the genuine production code: the entity/model classes with their ORM mapping, and the production query method(s) carrying the exact validated predicate. Place the queries in a single clean query class with one method per source query, named to match the source (query1..queryN / Query1..QueryN), each returning the production result (not the validation metadata map).
+4. Include the minimal imports needed for the production code to compile. [...]
+5. Emit CANONICAL, STABLE structure - this code is compared across runs with a CodeBleu (AST + data-flow) metric, so structure must be deterministic: entities in the same declaration order as the validated harness (one class per entity), then the query class with methods in source order. Consistent 4-space indentation. No comments, no markdown code fences, no prose, no placeholders.
+\end{minted}
+\caption{System prompt of the finalization stage (abridged).}
+\label{lst:app-prompt-finalize}
+\end{longlisting}
+
+The judge's prompt (\cref{sec:validation-judge}) is a short instruction constructed
+inline: it wraps the recent validation outputs in a \texttt{<validation\_results>}
+block and asks, \emph{``Is the translation logically equivalent and syntactically
+valid? Provide your reasoning and output ACCEPT or REJECT,''} with the response bound
+to the \texttt{EvaluationOutput} schema of \cref{lst:app-verdicts}.
+
+\section{Contextual Validation Harness Snippets}
+\label{app:snippets}
+
+Each framework contributes two contextual snippets -- a schema-validation and a
+query-execution entry point -- split by the marker
+\mintinline{text}{// --- Schema and Related Settings ---} into the invariant prelude
+that the harness assembler injects and the body region whose \emph{structure} the
+model imitates (\cref{sec:validation-grounding}). \Cref{tab:app-snippets} lists the
+files and their deterministic entry-point class names.
+
+\begin{table}[H]
+\centering
+\caption{Contextual snippet files and entry-point class names per framework.}
+\label{tab:app-snippets}
+\small
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\textbf{Framework} & \textbf{Schema validation} & \textbf{Query execution} \\
+\midrule
+EF Core & \texttt{EFCoreSchemaValidationEntrypoint} & \texttt{EFCoreQueryEntrypoint} \\
+Dapper & \texttt{DapperSchemaValidationEntrypoint} & \texttt{DapperQueryEntrypoint} \\
+NHibernate & \texttt{NHibernateSchemaValidationEntrypoint} & \texttt{NHibernateQueryEntrypoint} \\
+Spring Data MongoDB & \texttt{MongoSchemaValidationEntrypoint} & \texttt{MongoQueryEntrypoint} \\
+Spring Data Neo4j & \texttt{Neo4jSchemaValidationEntrypoint} & \texttt{Neo4jQueryEntrypoint} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{lst:app-serializer-cs} reproduces the core of the invariant .NET prelude: the
+serializer configuration that realizes the serialization contract of
+\cref{sec:validation-equivalence}. The Java prelude enforces the same rules through
+Jackson (ISO-8601 UTC timestamps at millisecond precision,
+\texttt{BigDecimal.setScale(3, HALF\_UP)}, alphabetical property and map-key ordering).
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, fontsize=\small, frame=single]{csharp}
+public static readonly JsonSerializerOptions Options = new()
+{
+    PropertyNamingPolicy = new CustomCamelCaseNamingPolicy(),   // CustomerID -> customerId
+    DictionaryKeyPolicy  = new CustomCamelCaseNamingPolicy(),
+    DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+    TypeInfoResolver = new DefaultJsonTypeInfoResolver
+        { Modifiers = { AlphabetizeProperties() } },            // fixed field order
+    Converters = {
+        new StrictIsoDateTimeConverter(),        // yyyy-MM-dd'T'HH:mm:ss.fff'Z', UTC
+        new StrictIsoDateTimeOffsetConverter(),
+        new FixedDecimalConverter(),             // "0.000" fixed 3-decimal scale
+        new FixedDoubleConverter(),
+        new JsonStringEnumConverter(new CustomCamelCaseNamingPolicy())
+    }
+};
+\end{minted}
+\caption{The invariant .NET serializer configuration (from \texttt{EFCoreQueryEntrypoint.cs}); the Java prelude mirrors every rule in Jackson.}
+\label{lst:app-serializer-cs}
+\end{listing}
+
+\Cref{lst:app-runquery} shows the per-query digest producer that every query harness
+uses: each query is reduced to its count and its two boundary samples under a
+deterministic ordering, keyed \texttt{query1..queryN} in the results JSON that the
+equivalence check of \cref{sec:validation-equivalence} consumes.
+
+\begin{listing}[H]
+\begin{minted}[linenos, breaklines, fontsize=\small, frame=single]{csharp}
+private static object RunQuery<T>(Func<IQueryable<T>> q,
+                                  Func<T, object>? orderBySelector = null)
+{
+    var query = q();
+    var count = query.Count();
+    return new {
+        sqlString = query.ToQueryString(), count,
+        firstSample = count > 0
+            ? (orderBySelector != null
+                ? q().OrderBy(orderBySelector).FirstOrDefault()
+                : query.FirstOrDefault()) : default,
+        lastSample = count > 1
+            ? (orderBySelector != null
+                ? q().OrderByDescending(orderBySelector).FirstOrDefault()
+                : query.LastOrDefault()) : default };
+}
+\end{minted}
+\caption{The count/boundary-sample digest producer of the EF Core query harness; each framework implements the same contract in its own idiom.}
+\label{lst:app-runquery}
+\end{listing}
+
+\section{Complete Execution Traces}
+\label{app:full-trace}
+
+Complete, tool-level traces of end-to-end runs -- every node visit, model call with
+its full prompt and completion, tool invocation, and token count -- are exported from
+the LangSmith tracing backend in \acrshort{json} format. The compact renderings in
+\cref{fig:uom-trace-efcore-mongo,fig:uom-trace-dapper-neo4j} are derived from these
+exports. The full traces are attached to this thesis in the \texttt{/traces} directory.
